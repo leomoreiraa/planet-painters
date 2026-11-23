@@ -1,0 +1,153 @@
+[gd_scene format=3 uid="uid://b6v8y4u2m3x01"]
+
+[ext_resource type="Script" uid="uid://cqiv7rcbdvq1a" path="res://scripts/ui/menu_3d_background.gd" id="1_script"]
+[ext_resource type="Shader" uid="uid://dbwmi5a5thlf7" path="res://shaders/planet_cartoon.gdshader" id="2_toon_shader"]
+[ext_resource type="Shader" uid="uid://drktrjjbpf8ew" path="res://shaders/atmosphere_cartoon.gdshader" id="3_atmo_shader"]
+
+[sub_resource type="Environment" id="Environment_space"]
+background_mode = 1
+background_color = Color(0.015, 0.02, 0.035, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.1, 0.12, 0.2, 1)
+ambient_light_energy = 0.25
+tonemap_mode = 2
+
+[sub_resource type="SphereMesh" id="SphereMesh_planet"]
+radius = 2.0
+height = 4.0
+
+[sub_resource type="Gradient" id="Gradient_planet_colors"]
+offsets = PackedFloat32Array(0, 0.38, 0.44, 0.5, 0.68, 0.84, 1)
+colors = PackedColorArray(0.08, 0.22, 0.55, 1, 0.16, 0.55, 0.85, 1, 0.88, 0.82, 0.55, 1, 0.25, 0.68, 0.28, 1, 0.14, 0.44, 0.2, 1, 0.5, 0.46, 0.42, 1, 0.95, 0.98, 1, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_terrain"]
+noise_type = 2
+frequency = 0.02
+fractal_octaves = 4
+fractal_gain = 0.6
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_albedo"]
+height = 256
+noise = SubResource("FastNoiseLite_terrain")
+color_ramp = SubResource("Gradient_planet_colors")
+seamless = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_planet"]
+render_priority = 0
+shader = ExtResource("2_toon_shader")
+shader_parameter/albedo_color = Color(1, 1, 1, 1)
+shader_parameter/use_vertex_color = false
+shader_parameter/use_texture = true
+shader_parameter/albedo_texture = SubResource("NoiseTexture2D_albedo")
+shader_parameter/use_stepped = true
+shader_parameter/steps = 3.0
+shader_parameter/step_smoothness = 0.05
+shader_parameter/shadow_tint = Color(0.14, 0.16, 0.28, 1)
+shader_parameter/shadow_tint_amount = 0.5
+shader_parameter/specular = 0.0
+shader_parameter/normal_strength = 0.0
+shader_parameter/use_rim = false
+shader_parameter/rim_color = Color(0.45, 0.8, 1, 1)
+shader_parameter/rim_amount = 2.5
+shader_parameter/rim_smoothness = 0.15
+shader_parameter/rim_mask_shadow = 0.8
+shader_parameter/rim_blend = 0.5
+shader_parameter/use_pattern = true
+shader_parameter/pattern_uv_mode = 2
+shader_parameter/pattern_tiling = 32.0
+shader_parameter/pattern_amount = 0.5
+shader_parameter/pattern_smoothness = 0.5
+shader_parameter/pattern_blend = 0.2
+
+[sub_resource type="SphereMesh" id="SphereMesh_atmosphere"]
+radius = 2.15
+height = 4.3
+radial_segments = 48
+rings = 24
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_atmosphere"]
+render_priority = 0
+shader = ExtResource("3_atmo_shader")
+shader_parameter/atmosphere_color = Color(0.25, 0.7, 1, 1)
+shader_parameter/rim_power = 2.5
+shader_parameter/rim_step_start = 0.6
+shader_parameter/rim_step_end = 0.98
+shader_parameter/alpha_scale = 0.45
+
+[sub_resource type="TorusMesh" id="TorusMesh_ring"]
+inner_radius = 2.45
+outer_radius = 3.6
+ring_segments = 16
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ring"]
+transparency = 1
+albedo_color = Color(0.45, 0.72, 0.95, 0.3)
+roughness = 0.2
+rim = 0.5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_particle"]
+transparency = 1
+blend_mode = 1
+shading_mode = 0
+albedo_color = Color(0.85, 0.95, 1, 0.8)
+
+[sub_resource type="QuadMesh" id="QuadMesh_particle"]
+material = SubResource("StandardMaterial3D_particle")
+size = Vector2(0.04, 0.04)
+
+[node name="Menu3DBackground" type="Node3D" unique_id=672810047]
+script = ExtResource("1_script")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1212859863]
+environment = SubResource("Environment_space")
+
+[node name="SunLight" type="DirectionalLight3D" parent="." unique_id=1646828797]
+transform = Transform3D(0.707107, -0.353553, 0.612372, 0, 0.866025, 0.5, -0.707107, -0.353553, 0.612372, 0, 10, 0)
+light_color = Color(1, 0.96, 0.88, 1)
+light_energy = 1.2
+shadow_enabled = true
+shadow_bias = 0.04
+
+[node name="CosmicFillLight" type="DirectionalLight3D" parent="." unique_id=457645355]
+transform = Transform3D(-0.707107, 0.353553, -0.612372, 0, 0.866025, 0.5, 0.707107, 0.353553, -0.612372, 0, -4, 0)
+light_color = Color(0.25, 0.35, 0.6, 1)
+light_energy = 0.55
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1989899227]
+unique_name_in_owner = true
+transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, 0.8, 0.2, 5.8)
+fov = 48.0
+
+[node name="PlanetPivot" type="Node3D" parent="." unique_id=1159525661]
+unique_name_in_owner = true
+transform = Transform3D(0.939693, 0.117364, 0.321394, 0, 0.939693, -0.34202, -0.34202, 0.321394, 0.883022, 3.979497, 0, 0.0024790764)
+
+[node name="PlanetMesh" type="MeshInstance3D" parent="PlanetPivot" unique_id=1324609702]
+mesh = SubResource("SphereMesh_planet")
+surface_material_override/0 = SubResource("ShaderMaterial_planet")
+
+[node name="AtmosphereMesh" type="MeshInstance3D" parent="PlanetPivot" unique_id=1041769090]
+unique_name_in_owner = true
+mesh = SubResource("SphereMesh_atmosphere")
+surface_material_override/0 = SubResource("ShaderMaterial_atmosphere")
+
+[node name="RingsMesh" type="MeshInstance3D" parent="PlanetPivot" unique_id=60752082]
+transform = Transform3D(1, 0, 0, 0, 0.00453154, -0.00211309, 0, 0.422618, 0.906308, 0, 0, 0)
+mesh = SubResource("TorusMesh_ring")
+surface_material_override/0 = SubResource("StandardMaterial3D_ring")
+
+[node name="SpaceDust" type="CPUParticles3D" parent="." unique_id=1468699828]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.379497, 0, 2.002479)
+amount = 80
+lifetime = 6.0
+preprocess = 3.0
+mesh = SubResource("QuadMesh_particle")
+emission_shape = 3
+emission_box_extents = Vector3(6, 4, 4)
+direction = Vector3(-0.5, 0.2, -0.2)
+spread = 25.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 0.1
+initial_velocity_max = 0.3
+scale_amount_min = 0.5
+scale_amount_max = 1.5

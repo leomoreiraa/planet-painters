@@ -1,0 +1,314 @@
+[gd_scene format=3 uid="uid://cx6q8c3y5t8a1"]
+
+[ext_resource type="Script" path="res://scripts/ui/settings_menu.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://resources/ui/panel_card.png" id="2_panel_card"]
+[ext_resource type="Texture2D" path="res://resources/ui/header_ribbon.png" id="3_header_ribbon"]
+[ext_resource type="Texture2D" path="res://resources/ui/btn_close.png" id="4_btn_close"]
+[ext_resource type="Texture2D" path="res://resources/ui/btn_close_hover.png" id="5_btn_close_hover"]
+[ext_resource type="Texture2D" path="res://resources/ui/btn_dark.png" id="6_btn_dark"]
+[ext_resource type="Texture2D" path="res://resources/ui/btn_dark_hover.png" id="7_btn_dark_hover"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxFlat_panel"]
+texture = ExtResource("2_panel_card")
+texture_margin_left = 28.0
+texture_margin_top = 28.0
+texture_margin_right = 28.0
+texture_margin_bottom = 28.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxFlat_header_ribbon"]
+texture = ExtResource("3_header_ribbon")
+texture_margin_left = 16.0
+texture_margin_top = 8.0
+texture_margin_right = 16.0
+texture_margin_bottom = 8.0
+content_margin_left = 20.0
+content_margin_top = 4.0
+content_margin_right = 20.0
+content_margin_bottom = 6.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxFlat_close_btn"]
+texture = ExtResource("4_btn_close")
+texture_margin_left = 10.0
+texture_margin_top = 10.0
+texture_margin_right = 10.0
+texture_margin_bottom = 10.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxFlat_close_btn_hover"]
+texture = ExtResource("5_btn_close_hover")
+texture_margin_left = 10.0
+texture_margin_top = 10.0
+texture_margin_right = 10.0
+texture_margin_bottom = 10.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxFlat_btn"]
+texture = ExtResource("6_btn_dark")
+texture_margin_left = 10.0
+texture_margin_top = 10.0
+texture_margin_right = 10.0
+texture_margin_bottom = 10.0
+content_margin_left = 16.0
+content_margin_top = 8.0
+content_margin_right = 16.0
+content_margin_bottom = 8.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxFlat_btn_hover"]
+texture = ExtResource("7_btn_dark_hover")
+texture_margin_left = 10.0
+texture_margin_top = 10.0
+texture_margin_right = 10.0
+texture_margin_bottom = 10.0
+content_margin_left = 16.0
+content_margin_top = 8.0
+content_margin_right = 16.0
+content_margin_bottom = 8.0
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_hsep"]
+color = Color(0.85, 0.7, 0.35, 0.35)
+
+[node name="SettingsMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+
+[node name="DimOverlay" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.02, 0.02, 0.05, 0.75)
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SettingsWindow" type="Control" parent="CenterContainer"]
+custom_minimum_size = Vector2(620, 520)
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="CenterContainer/SettingsWindow"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/SettingsWindow/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 36
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 24
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/SettingsWindow/PanelContainer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="AudioHeader" type="Label" parent="CenterContainer/SettingsWindow/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.88, 0.5, 1)
+theme_override_font_sizes/font_size = 16
+text = "Áudio"
+
+[node name="AudioGrid" type="GridContainer" parent="CenterContainer/SettingsWindow/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/h_separation = 16
+theme_override_constants/v_separation = 12
+columns = 3
+
+[node name="MasterLabel" type="Label" parent="CenterContainer/SettingsWindow/PanelContainer/MarginContainer/VBoxContainer/AudioGrid"]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.92, 0.94, 0.98, 1)
+text = "Geral"
+
+[node name="MasterSlider" type="HSlider" parent="CenterContainer/SettingsWindow/PanelContainer/MarginContainer/VBoxContainer/AudioGrid"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(240, 24)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+step = 1.0
+value = 80.0
+
+[node name="MasterValLabel" type="Label" parent="CenterContainer/SettingsWindow/PanelContainer/MarginContainer/VBoxContainer/AudioGrid"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.92, 0.94, 0.98, 1)
+text = "80%"
+horizontal_alignment = 2
+
+[node name="MusicLabel" type="Label" parent="CenterContainer/SettingsWindow/PanelContainer/MarginContainer/VBoxContainer/AudioGrid"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.92, 0.94, 0.98, 1)
+text = "Música"
+
+[node name="MusicSlider" type="HSlider" parent="CenterContainer/SettingsWindow/PanelContainer/MarginContainer/VBoxContainer/AudioGrid"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(240, 24)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+step = 1.0
+value = 70.0
+
+[node name="MusicValLabel" type="Label" parent="CenterContainer/SettingsWindow/PanelContainer/MarginContainer/VBoxContainer/AudioGrid"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.92, 0.94, 0.98, 1)
+text = "70%"
+horizontal_alignment = 2
+
+[node name="SFXLabel" type="Label" parent="CenterContainer/SettingsWindow/PanelContainer/MarginContainer/VBoxContainer/AudioGrid"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.92, 0.94, 0.98, 1)
+text = "Efeitos (SFX)"
+
+[node name="SFXSlider" type="HSlider" parent="CenterContainer/SettingsWindow/PanelContainer/MarginContainer/VBoxContainer/AudioGrid"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(240, 24)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+step = 1.0
+value = 80.0
+
+[node name="SFXValLabel" type="Label" parent="CenterContainer/SettingsWindow/PanelContainer/MarginContainer/VBoxContainer/AudioGrid"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.92, 0.94, 0.98, 1)
+text = "80%"
+horizontal_alignment = 2
+
+[node name="HSeparator2" type="HSeparator" parent="CenterContainer/SettingsWindow/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxLine_hsep")
+
+[node name="VideoHeader" type="Label" parent="CenterContainer/SettingsWindow/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.88, 0.5, 1)
+theme_override_font_sizes/font_size = 16
+text = "Vídeo"
+
+[node name="VideoGrid" type="GridContainer" parent="CenterContainer/SettingsWindow/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/h_separation = 16
+theme_override_constants/v_separation = 12
+columns = 2
+
+[node name="WindowModeLabel" type="Label" parent="CenterContainer/SettingsWindow/PanelContainer/MarginContainer/VBoxContainer/VideoGrid"]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.92, 0.94, 0.98, 1)
+text = "Modo de Janela"
+
+[node name="WindowModeOption" type="OptionButton" parent="CenterContainer/SettingsWindow/PanelContainer/MarginContainer/VBoxContainer/VideoGrid"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+
+[node name="ResolutionLabel" type="Label" parent="CenterContainer/SettingsWindow/PanelContainer/MarginContainer/VBoxContainer/VideoGrid"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.92, 0.94, 0.98, 1)
+text = "Resolução"
+
+[node name="ResolutionOption" type="OptionButton" parent="CenterContainer/SettingsWindow/PanelContainer/MarginContainer/VBoxContainer/VideoGrid"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+
+[node name="VSyncLabel" type="Label" parent="CenterContainer/SettingsWindow/PanelContainer/MarginContainer/VBoxContainer/VideoGrid"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.92, 0.94, 0.98, 1)
+text = "V-Sync"
+
+[node name="VSyncCheck" type="CheckButton" parent="CenterContainer/SettingsWindow/PanelContainer/MarginContainer/VBoxContainer/VideoGrid"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_colors/font_color = Color(0.92, 0.94, 0.98, 1)
+button_pressed = true
+
+[node name="HSeparator3" type="HSeparator" parent="CenterContainer/SettingsWindow/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxLine_hsep")
+
+[node name="ButtonsHBox" type="HBoxContainer" parent="CenterContainer/SettingsWindow/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="ResetButton" type="Button" parent="CenterContainer/SettingsWindow/PanelContainer/MarginContainer/VBoxContainer/ButtonsHBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_hover")
+text = "Restaurar Padrões"
+
+[node name="Spacer" type="Control" parent="CenterContainer/SettingsWindow/PanelContainer/MarginContainer/VBoxContainer/ButtonsHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="BackButton" type="Button" parent="CenterContainer/SettingsWindow/PanelContainer/MarginContainer/VBoxContainer/ButtonsHBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_hover")
+text = "Voltar (Esc)"
+
+[node name="SettingsHeaderRibbon" type="PanelContainer" parent="CenterContainer/SettingsWindow"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -110.0
+offset_top = -14.0
+offset_right = 110.0
+offset_bottom = 20.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_header_ribbon")
+
+[node name="SettingsHeaderLabel" type="Label" parent="CenterContainer/SettingsWindow/SettingsHeaderRibbon"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 14
+text = "CONFIGURAÇÕES"
+horizontal_alignment = 1
+
+[node name="CloseButton" type="Button" parent="CenterContainer/SettingsWindow" unique_id=98127341]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -20.0
+offset_top = -14.0
+offset_right = 14.0
+offset_bottom = 20.0
+theme_override_styles/normal = SubResource("StyleBoxFlat_close_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_close_btn_hover")

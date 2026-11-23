@@ -1,0 +1,1140 @@
+[gd_scene format=3 uid="uid://c6v2j8xap1l3q"]
+
+[ext_resource type="Script" uid="uid://c4ea8b27q53g4" path="res://scripts/game/planet_creator_controller.gd" id="1_controller"]
+[ext_resource type="Script" uid="uid://du3isabmebitw" path="res://scripts/game/planet_mesh.gd" id="2_planet"]
+[ext_resource type="Shader" uid="uid://dbwmi5a5thlf7" path="res://shaders/planet_cartoon.gdshader" id="3_b08ht"]
+[ext_resource type="Script" uid="uid://cf8a8ovqye1cj" path="res://scripts/game/planet_creator_hud.gd" id="3_hud"]
+[ext_resource type="Texture2D" uid="uid://doj2l01vxpdpr" path="res://resources/Images/images (2).jpg" id="4_4bjkw"]
+[ext_resource type="Script" uid="uid://cqpsho7053l4s" path="res://scripts/game/scatter/planet_scatter.gd" id="4_scatter"]
+[ext_resource type="PackedScene" uid="uid://cx6q8c3y5t8a1" path="res://scenes/ui/settings_menu.tscn" id="5_settings"]
+[ext_resource type="Texture2D" uid="uid://dno4ww65kran8" path="res://resources/ui/panel_card.png" id="6_panel_card"]
+[ext_resource type="Texture2D" uid="uid://b45ufkq01bscs" path="res://resources/ui/dock_bar.png" id="7_dock_bar"]
+[ext_resource type="Texture2D" uid="uid://dyg20khaehkg2" path="res://resources/ui/header_ribbon.png" id="8_header_ribbon"]
+[ext_resource type="Texture2D" uid="uid://ciydvww4p5uyt" path="res://resources/ui/btn_close.png" id="9_btn_close"]
+[ext_resource type="Texture2D" uid="uid://he0jls1sj32b" path="res://resources/ui/btn_close_hover.png" id="10_btn_close_hover"]
+[ext_resource type="Texture2D" uid="uid://btlfqis2f0tby" path="res://resources/ui/btn_dark.png" id="12_btn_dark"]
+[ext_resource type="Texture2D" uid="uid://vndds2g3qmp8" path="res://resources/ui/btn_dark_hover.png" id="13_btn_dark_hover"]
+[ext_resource type="Texture2D" uid="uid://cy43su237c06l" path="res://resources/ui/input_field.png" id="16_input_field"]
+[ext_resource type="Texture2D" uid="uid://v6qxvfrbk4cu" path="res://resources/ui/badge_dark.png" id="17_badge_dark"]
+[ext_resource type="Texture2D" path="res://resources/ui/icons/icon_new_world.png" id="18_icon_new_world"]
+
+[sub_resource type="Environment" id="Environment_space"]
+background_mode = 1
+background_color = Color(0.015, 0.02, 0.035, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.1, 0.12, 0.2, 1)
+ambient_light_energy = 0.25
+tonemap_mode = 2
+glow_enabled = true
+glow_levels/1 = 0.8
+glow_levels/2 = 0.6
+glow_levels/3 = 1.0
+glow_intensity = 0.8
+glow_bloom = 0.22
+adjustment_enabled = true
+adjustment_contrast = 1.15
+adjustment_saturation = 1.35
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xnl4t"]
+render_priority = 0
+shader = ExtResource("3_b08ht")
+shader_parameter/albedo_color = Color(1, 1, 1, 1)
+shader_parameter/use_vertex_color = true
+shader_parameter/use_texture = false
+shader_parameter/use_stepped = true
+shader_parameter/steps = 4.0
+shader_parameter/step_smoothness = 0.0
+shader_parameter/shadow_tint = Color(0.17649108, 0.36136502, 0.50629187, 1)
+shader_parameter/shadow_tint_amount = 0.15000000223518
+shader_parameter/specular = 0.0
+shader_parameter/normal_strength = 0.0
+shader_parameter/use_rim = true
+shader_parameter/rim_color = Color(1, 0.12941177, 0.2, 1)
+shader_parameter/rim_amount = 10.0
+shader_parameter/rim_smoothness = 0.0
+shader_parameter/rim_mask_shadow = 1.0
+shader_parameter/rim_blend = 0.85000001266602
+shader_parameter/use_pattern = false
+shader_parameter/pattern_texture = ExtResource("4_4bjkw")
+shader_parameter/pattern_uv_mode = 2
+shader_parameter/pattern_tiling = 32.0
+shader_parameter/pattern_amount = 0.5
+shader_parameter/pattern_smoothness = 0.5
+shader_parameter/pattern_blend = 0.2
+
+[sub_resource type="SphereMesh" id="SphereMesh_atmosphere"]
+material = SubResource("ShaderMaterial_xnl4t")
+radius = 2.95
+height = 5.9
+radial_segments = 48
+rings = 24
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cursor"]
+transparency = 1
+blend_mode = 1
+shading_mode = 0
+albedo_color = Color(0.2, 0.9, 1, 0.85)
+
+[sub_resource type="TorusMesh" id="TorusMesh_cursor"]
+material = SubResource("StandardMaterial3D_cursor")
+inner_radius = 0.95
+outer_radius = 1.05
+rings = 32
+ring_segments = 3
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dust"]
+transparency = 1
+blend_mode = 1
+shading_mode = 0
+albedo_color = Color(0.85, 0.95, 1, 0.7)
+
+[sub_resource type="QuadMesh" id="QuadMesh_dust"]
+material = SubResource("StandardMaterial3D_dust")
+size = Vector2(0.04, 0.04)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxFlat_glass"]
+texture = ExtResource("7_dock_bar")
+texture_margin_left = 24.0
+texture_margin_top = 24.0
+texture_margin_right = 24.0
+texture_margin_bottom = 24.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxFlat_tool_btn"]
+content_margin_left = 10.0
+content_margin_top = 4.0
+content_margin_right = 10.0
+content_margin_bottom = 4.0
+texture = ExtResource("12_btn_dark")
+texture_margin_left = 8.0
+texture_margin_top = 8.0
+texture_margin_right = 8.0
+texture_margin_bottom = 8.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxFlat_tool_btn_hover"]
+content_margin_left = 10.0
+content_margin_top = 4.0
+content_margin_right = 10.0
+content_margin_bottom = 4.0
+texture = ExtResource("13_btn_dark_hover")
+texture_margin_left = 8.0
+texture_margin_top = 8.0
+texture_margin_right = 8.0
+texture_margin_bottom = 8.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxFlat_line_edit"]
+content_margin_left = 8.0
+content_margin_top = 4.0
+content_margin_right = 8.0
+content_margin_bottom = 4.0
+texture = ExtResource("16_input_field")
+texture_margin_left = 6.0
+texture_margin_top = 6.0
+texture_margin_right = 6.0
+texture_margin_bottom = 6.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxFlat_badge"]
+content_margin_left = 12.0
+content_margin_top = 4.0
+content_margin_right = 12.0
+content_margin_bottom = 4.0
+texture = ExtResource("17_badge_dark")
+texture_margin_left = 8.0
+texture_margin_top = 8.0
+texture_margin_right = 8.0
+texture_margin_bottom = 8.0
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_vsep"]
+color = Color(0.85, 0.7, 0.35, 0.35)
+vertical = true
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxFlat_shape_btn"]
+content_margin_left = 6.0
+content_margin_top = 3.0
+content_margin_right = 6.0
+content_margin_bottom = 3.0
+texture = ExtResource("12_btn_dark")
+texture_margin_left = 8.0
+texture_margin_top = 8.0
+texture_margin_right = 8.0
+texture_margin_bottom = 8.0
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_hsep"]
+color = Color(0.85, 0.7, 0.35, 0.35)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxFlat_modal_card"]
+texture = ExtResource("6_panel_card")
+texture_margin_left = 24.0
+texture_margin_top = 24.0
+texture_margin_right = 24.0
+texture_margin_bottom = 24.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxFlat_header_ribbon"]
+content_margin_left = 20.0
+content_margin_top = 4.0
+content_margin_right = 20.0
+content_margin_bottom = 6.0
+texture = ExtResource("8_header_ribbon")
+texture_margin_left = 16.0
+texture_margin_top = 8.0
+texture_margin_right = 16.0
+texture_margin_bottom = 8.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxFlat_close_btn"]
+texture = ExtResource("9_btn_close")
+texture_margin_left = 10.0
+texture_margin_top = 10.0
+texture_margin_right = 10.0
+texture_margin_bottom = 10.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxFlat_close_btn_hover"]
+texture = ExtResource("10_btn_close_hover")
+texture_margin_left = 10.0
+texture_margin_top = 10.0
+texture_margin_right = 10.0
+texture_margin_bottom = 10.0
+
+[node name="PlanetCreator" type="Node3D" unique_id=133508711 node_paths=PackedStringArray("planet", "camera", "brush_cursor")]
+script = ExtResource("1_controller")
+planet = NodePath("Planet")
+camera = NodePath("Camera3D")
+brush_cursor = NodePath("BrushCursor")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=153397280]
+environment = SubResource("Environment_space")
+
+[node name="SunLight" type="DirectionalLight3D" parent="." unique_id=796083827]
+transform = Transform3D(0.707107, -0.353553, 0.612372, 0, 0.866025, 0.5, -0.707107, -0.353553, 0.612372, 0, 10, 0)
+light_energy = 0.5
+shadow_enabled = true
+shadow_bias = 0.04
+
+[node name="CosmicFillLight" type="DirectionalLight3D" parent="." unique_id=1120986500]
+transform = Transform3D(-0.707107, 0.353553, -0.612372, 0, 0.866025, 0.5, 0.707107, 0.353553, -0.612372, 0, -4, 0)
+light_color = Color(0.2, 0.28, 0.5, 1)
+light_energy = 0.25
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=115197692]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 0.955336, 0.29552, 0, -0.29552, 0.955336, 0, 2.8, 13.5)
+fov = 44.0
+
+[node name="Planet" type="Node3D" parent="." unique_id=570492353]
+unique_name_in_owner = true
+script = ExtResource("2_planet")
+
+[node name="SurfaceMesh" type="MeshInstance3D" parent="Planet" unique_id=1019521577]
+
+[node name="AtmosphereMesh" type="MeshInstance3D" parent="Planet" unique_id=618862775]
+mesh = SubResource("SphereMesh_atmosphere")
+
+[node name="Scatter" type="Node3D" parent="Planet" unique_id=1215896723]
+script = ExtResource("4_scatter")
+
+[node name="BrushCursor" type="Node3D" parent="." unique_id=364421518]
+unique_name_in_owner = true
+visible = false
+
+[node name="CursorVisual" type="MeshInstance3D" parent="BrushCursor" unique_id=1931485243]
+mesh = SubResource("TorusMesh_cursor")
+
+[node name="SpaceDust" type="CPUParticles3D" parent="." unique_id=1532004864]
+amount = 120
+lifetime = 8.0
+preprocess = 4.0
+mesh = SubResource("QuadMesh_dust")
+emission_shape = 3
+emission_box_extents = Vector3(8, 6, 8)
+direction = Vector3(-0.3, 0.1, -0.2)
+spread = 35.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 0.05
+initial_velocity_max = 0.25
+scale_amount_min = 0.4
+scale_amount_max = 1.2
+
+[node name="HUD" type="CanvasLayer" parent="." unique_id=996040214 node_paths=PackedStringArray("controller", "planet")]
+script = ExtResource("3_hud")
+controller = NodePath("..")
+planet = NodePath("../Planet")
+
+[node name="MainHUDContainer" type="Control" parent="HUD" unique_id=2018833047]
+unique_name_in_owner = true
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="TopBarWrapper" type="VBoxContainer" parent="HUD/MainHUDContainer" unique_id=1206549970]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -440.0
+offset_top = 8.0
+offset_right = 440.0
+offset_bottom = 80.0
+grow_horizontal = 2
+theme_override_constants/separation = 0
+
+[node name="TopBar" type="PanelContainer" parent="HUD/MainHUDContainer/TopBarWrapper" unique_id=1206549977]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_glass")
+
+[node name="Margin" type="MarginContainer" parent="HUD/MainHUDContainer/TopBarWrapper/TopBar" unique_id=1286408108]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 4
+
+[node name="HBox" type="HBoxContainer" parent="HUD/MainHUDContainer/TopBarWrapper/TopBar/Margin" unique_id=1342616191]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="IconLabel" type="TextureRect" parent="HUD/MainHUDContainer/TopBarWrapper/TopBar/Margin/HBox" unique_id=1383528589]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+size_flags_vertical = 4
+texture = ExtResource("18_icon_new_world")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="BtnUndo" type="Button" parent="HUD/MainHUDContainer/TopBarWrapper/TopBar/Margin/HBox" unique_id=1709479910]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(30, 28)
+layout_mode = 2
+tooltip_text = "Desfazer (Ctrl+Z)"
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(0.55, 0.58, 0.65, 1)
+theme_override_font_sizes/font_size = 11
+theme_override_styles/normal = SubResource("StyleBoxFlat_tool_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_tool_btn_hover")
+text = ""
+
+[node name="BtnRedo" type="Button" parent="HUD/MainHUDContainer/TopBarWrapper/TopBar/Margin/HBox" unique_id=188908773]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(30, 28)
+layout_mode = 2
+tooltip_text = "Refazer (Ctrl+Y)"
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(0.55, 0.58, 0.65, 1)
+theme_override_font_sizes/font_size = 11
+theme_override_styles/normal = SubResource("StyleBoxFlat_tool_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_tool_btn_hover")
+text = ""
+
+[node name="PlanetNameEdit" type="LineEdit" parent="HUD/MainHUDContainer/TopBarWrapper/TopBar/Margin/HBox" unique_id=1076553330]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 11
+theme_override_styles/normal = SubResource("StyleBoxFlat_line_edit")
+text = "Novo Mundo-01"
+placeholder_text = "Nome do Planeta..."
+
+[node name="PlanetTypeBadge" type="Label" parent="HUD/MainHUDContainer/TopBarWrapper/TopBar/Margin/HBox" unique_id=1723418763]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.88, 0.5, 1)
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBoxFlat_badge")
+text = "Planeta Terra / Jardim"
+
+[node name="ToastLabel" type="Label" parent="HUD/MainHUDContainer/TopBarWrapper/TopBar/Margin/HBox" unique_id=1830321969]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4, 0.9, 0.5, 1)
+theme_override_font_sizes/font_size = 11
+text = "Salvo!"
+
+[node name="Spacer" type="Control" parent="HUD/MainHUDContainer/TopBarWrapper/TopBar/Margin/HBox" unique_id=1392245101]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+
+[node name="StatsLabel" type="Label" parent="HUD/MainHUDContainer/TopBarWrapper/TopBar/Margin/HBox" unique_id=714177688]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.93, 0.98, 1)
+theme_override_font_sizes/font_size = 10
+text = "Ambiente: Água: 60%  Vida: 30%  Terra: 10%"
+
+[node name="VSepActions" type="VSeparator" parent="HUD/MainHUDContainer/TopBarWrapper/TopBar/Margin/HBox" unique_id=408219138]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxLine_vsep")
+
+[node name="BtnOpenWorldGen" type="Button" parent="HUD/MainHUDContainer/TopBarWrapper/TopBar/Margin/HBox" unique_id=1138960298]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(30, 28)
+layout_mode = 2
+tooltip_text = "Criar Novo Planeta"
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBoxFlat_tool_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_tool_btn_hover")
+text = ""
+
+[node name="BtnPhotoMode" type="Button" parent="HUD/MainHUDContainer/TopBarWrapper/TopBar/Margin/HBox" unique_id=752566912]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(30, 28)
+layout_mode = 2
+tooltip_text = "Modo Foto (Ocultar Interface)"
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBoxFlat_tool_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_tool_btn_hover")
+text = ""
+
+[node name="BtnOpenPause" type="Button" parent="HUD/MainHUDContainer/TopBarWrapper/TopBar/Margin/HBox" unique_id=1489850961]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(30, 28)
+layout_mode = 2
+tooltip_text = "Menu de Pausa [Esc]"
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBoxFlat_tool_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_tool_btn_hover")
+text = ""
+
+[node name="ToggleTopBarBox" type="HBoxContainer" parent="HUD/MainHUDContainer/TopBarWrapper" unique_id=1206549971]
+layout_mode = 2
+alignment = 1
+
+[node name="BtnToggleTopBar" type="Button" parent="HUD/MainHUDContainer/TopBarWrapper/ToggleTopBarBox" unique_id=1206549972]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(44, 18)
+layout_mode = 2
+tooltip_text = "Ocultar Menu Superior"
+theme_override_colors/font_color = Color(1, 0.92, 0.75, 1)
+theme_override_font_sizes/font_size = 11
+theme_override_styles/normal = SubResource("StyleBoxFlat_shape_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_tool_btn_hover")
+text = "▲"
+
+[node name="BottomDock" type="PanelContainer" parent="HUD/MainHUDContainer" unique_id=829491394]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -440.0
+offset_top = -116.0
+offset_right = 440.0
+offset_bottom = -12.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_glass")
+
+[node name="Margin" type="MarginContainer" parent="HUD/MainHUDContainer/BottomDock" unique_id=1912186818]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 6
+
+[node name="VBox" type="VBoxContainer" parent="HUD/MainHUDContainer/BottomDock/Margin" unique_id=1246517992]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="ToolbarHBox" type="HBoxContainer" parent="HUD/MainHUDContainer/BottomDock/Margin/VBox" unique_id=1840000001]
+layout_mode = 2
+theme_override_constants/separation = 5
+alignment = 1
+
+[node name="ToolsHBox" type="HBoxContainer" parent="HUD/MainHUDContainer/BottomDock/Margin/VBox/ToolbarHBox" unique_id=1840000002]
+layout_mode = 2
+theme_override_constants/separation = 3
+
+[node name="BtnModePaint" type="Button" parent="HUD/MainHUDContainer/BottomDock/Margin/VBox/ToolbarHBox/ToolsHBox" unique_id=1840000003]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(30, 28)
+layout_mode = 2
+tooltip_text = "Pintar Terreno [1]"
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBoxFlat_tool_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_tool_btn_hover")
+text = ""
+
+[node name="BtnModeElevate" type="Button" parent="HUD/MainHUDContainer/BottomDock/Margin/VBox/ToolbarHBox/ToolsHBox" unique_id=1840000004]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(30, 28)
+layout_mode = 2
+tooltip_text = "Elevar Relevo [2]"
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBoxFlat_tool_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_tool_btn_hover")
+text = ""
+
+[node name="BtnModeCarve" type="Button" parent="HUD/MainHUDContainer/BottomDock/Margin/VBox/ToolbarHBox/ToolsHBox" unique_id=1840000005]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(30, 28)
+layout_mode = 2
+tooltip_text = "Cavar Crateras [3]"
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBoxFlat_tool_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_tool_btn_hover")
+text = ""
+
+[node name="BtnModeSmooth" type="Button" parent="HUD/MainHUDContainer/BottomDock/Margin/VBox/ToolbarHBox/ToolsHBox" unique_id=1840000006]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(30, 28)
+layout_mode = 2
+tooltip_text = "Suavizar Terreno [4]"
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBoxFlat_tool_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_tool_btn_hover")
+text = ""
+
+[node name="BtnModeFlatten" type="Button" parent="HUD/MainHUDContainer/BottomDock/Margin/VBox/ToolbarHBox/ToolsHBox" unique_id=1840000007]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(30, 28)
+layout_mode = 2
+tooltip_text = "Planar / Platô [5]"
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBoxFlat_tool_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_tool_btn_hover")
+text = ""
+
+[node name="BtnModeFill" type="Button" parent="HUD/MainHUDContainer/BottomDock/Margin/VBox/ToolbarHBox/ToolsHBox" unique_id=1840000008]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(30, 28)
+layout_mode = 2
+tooltip_text = "Preencher Todo o Planeta [6]"
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBoxFlat_tool_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_tool_btn_hover")
+text = ""
+
+[node name="BtnModeEyedropper" type="Button" parent="HUD/MainHUDContainer/BottomDock/Margin/VBox/ToolbarHBox/ToolsHBox" unique_id=1840000009]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(30, 28)
+layout_mode = 2
+tooltip_text = "Conta-gotas / Amostrador de Terreno [I]"
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBoxFlat_tool_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_tool_btn_hover")
+text = ""
+
+[node name="VSepTools" type="VSeparator" parent="HUD/MainHUDContainer/BottomDock/Margin/VBox/ToolbarHBox" unique_id=1840000010]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxLine_vsep")
+
+[node name="SizesHBox" type="HBoxContainer" parent="HUD/MainHUDContainer/BottomDock/Margin/VBox/ToolbarHBox" unique_id=1840000011]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="SizeLabel" type="Label" parent="HUD/MainHUDContainer/BottomDock/Margin/VBox/ToolbarHBox/SizesHBox" unique_id=1840000012]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.92, 0.94, 0.98, 1)
+theme_override_font_sizes/font_size = 10
+text = "Pincel:"
+
+[node name="BtnSizeDec" type="Button" parent="HUD/MainHUDContainer/BottomDock/Margin/VBox/ToolbarHBox/SizesHBox" unique_id=1840000030]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(20, 26)
+layout_mode = 2
+tooltip_text = "Diminuir Pincel ([)"
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBoxFlat_shape_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_tool_btn_hover")
+text = "-"
+
+[node name="BtnSize1" type="Button" parent="HUD/MainHUDContainer/BottomDock/Margin/VBox/ToolbarHBox/SizesHBox" unique_id=1840000013]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(26, 26)
+layout_mode = 2
+tooltip_text = "Tamanho 0.2x (0.05 - Micro)"
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBoxFlat_shape_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_tool_btn_hover")
+text = "0.2x"
+
+[node name="BtnSize2" type="Button" parent="HUD/MainHUDContainer/BottomDock/Margin/VBox/ToolbarHBox/SizesHBox" unique_id=1840000014]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(26, 26)
+layout_mode = 2
+tooltip_text = "Tamanho 0.5x (0.12 - Pequeno)"
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBoxFlat_shape_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_tool_btn_hover")
+text = "0.5x"
+
+[node name="BtnSize4" type="Button" parent="HUD/MainHUDContainer/BottomDock/Margin/VBox/ToolbarHBox/SizesHBox" unique_id=1840000015]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(24, 26)
+layout_mode = 2
+tooltip_text = "Tamanho 1x (0.25 - Médio)"
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBoxFlat_shape_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_tool_btn_hover")
+text = "1x"
+
+[node name="BtnSize8" type="Button" parent="HUD/MainHUDContainer/BottomDock/Margin/VBox/ToolbarHBox/SizesHBox" unique_id=1840000016]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(24, 26)
+layout_mode = 2
+tooltip_text = "Tamanho 2x (0.55 - Grande)"
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBoxFlat_shape_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_tool_btn_hover")
+text = "2x"
+
+[node name="BtnSizeInc" type="Button" parent="HUD/MainHUDContainer/BottomDock/Margin/VBox/ToolbarHBox/SizesHBox" unique_id=1840000031]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(20, 26)
+layout_mode = 2
+tooltip_text = "Aumentar Pincel (])"
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBoxFlat_shape_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_tool_btn_hover")
+text = "+"
+
+[node name="RadiusSlider" type="HSlider" parent="HUD/MainHUDContainer/BottomDock/Margin/VBox/ToolbarHBox/SizesHBox" unique_id=572883143]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+size_flags_vertical = 4
+min_value = 0.04
+max_value = 1.6
+step = 0.01
+value = 0.25
+
+[node name="RadiusValLabel" type="Label" parent="HUD/MainHUDContainer/BottomDock/Margin/VBox/ToolbarHBox/SizesHBox" unique_id=1166938556]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.92, 0.94, 0.98, 1)
+theme_override_font_sizes/font_size = 9
+text = "0.25"
+
+[node name="VSepSizes" type="VSeparator" parent="HUD/MainHUDContainer/BottomDock/Margin/VBox/ToolbarHBox" unique_id=1840000017]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxLine_vsep")
+
+[node name="ShapesHBox" type="HBoxContainer" parent="HUD/MainHUDContainer/BottomDock/Margin/VBox/ToolbarHBox" unique_id=1840000018]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="ShapeLabel" type="Label" parent="HUD/MainHUDContainer/BottomDock/Margin/VBox/ToolbarHBox/ShapesHBox" unique_id=613024830]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.92, 0.94, 0.98, 1)
+theme_override_font_sizes/font_size = 10
+text = "Forma:"
+
+[node name="BtnShapeSmooth" type="Button" parent="HUD/MainHUDContainer/BottomDock/Margin/VBox/ToolbarHBox/ShapesHBox" unique_id=962886771]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(34, 26)
+layout_mode = 2
+tooltip_text = "Formato Suave (Gaussiano)"
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBoxFlat_shape_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_tool_btn_hover")
+text = "Suave"
+
+[node name="BtnShapeHard" type="Button" parent="HUD/MainHUDContainer/BottomDock/Margin/VBox/ToolbarHBox/ShapesHBox" unique_id=1484525099]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(34, 26)
+layout_mode = 2
+tooltip_text = "Formato Nítido (Bordas duras)"
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBoxFlat_shape_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_tool_btn_hover")
+text = "Nítido"
+
+[node name="BtnShapeNoise" type="Button" parent="HUD/MainHUDContainer/BottomDock/Margin/VBox/ToolbarHBox/ShapesHBox" unique_id=985387872]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(34, 26)
+layout_mode = 2
+tooltip_text = "Formato Orgânico (Ruído fractal)"
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBoxFlat_shape_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_tool_btn_hover")
+text = "Ruído"
+
+[node name="VSepShapes" type="VSeparator" parent="HUD/MainHUDContainer/BottomDock/Margin/VBox/ToolbarHBox" unique_id=1840000019]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxLine_vsep")
+
+[node name="StrengthHBox" type="HBoxContainer" parent="HUD/MainHUDContainer/BottomDock/Margin/VBox/ToolbarHBox" unique_id=1840000020]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="StrengthLabel" type="Label" parent="HUD/MainHUDContainer/BottomDock/Margin/VBox/ToolbarHBox/StrengthHBox" unique_id=1558343817]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.92, 0.94, 0.98, 1)
+theme_override_font_sizes/font_size = 10
+text = "Força:"
+
+[node name="StrengthSlider" type="HSlider" parent="HUD/MainHUDContainer/BottomDock/Margin/VBox/ToolbarHBox/StrengthHBox" unique_id=1241352880]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(36, 0)
+layout_mode = 2
+size_flags_vertical = 4
+min_value = 0.2
+max_value = 2.5
+step = 0.1
+value = 1.0
+
+[node name="StrengthValLabel" type="Label" parent="HUD/MainHUDContainer/BottomDock/Margin/VBox/ToolbarHBox/StrengthHBox" unique_id=1810098754]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(22, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.92, 0.94, 0.98, 1)
+theme_override_font_sizes/font_size = 9
+text = "1.0x"
+
+[node name="VSepStrength" type="VSeparator" parent="HUD/MainHUDContainer/BottomDock/Margin/VBox/ToolbarHBox" unique_id=1840000021]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxLine_vsep")
+
+[node name="PlanetSizeHBox" type="HBoxContainer" parent="HUD/MainHUDContainer/BottomDock/Margin/VBox/ToolbarHBox" unique_id=1840000032]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="PlanetSizeLabel" type="Label" parent="HUD/MainHUDContainer/BottomDock/Margin/VBox/ToolbarHBox/PlanetSizeHBox" unique_id=1840000033]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.92, 0.94, 0.98, 1)
+theme_override_font_sizes/font_size = 10
+text = "Globo:"
+
+[node name="BtnPlanetSizeDec" type="Button" parent="HUD/MainHUDContainer/BottomDock/Margin/VBox/ToolbarHBox/PlanetSizeHBox" unique_id=1840000034]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(20, 26)
+layout_mode = 2
+tooltip_text = "Diminuir Planeta (PageDown)"
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBoxFlat_shape_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_tool_btn_hover")
+text = "-"
+
+[node name="PlanetSizeValBtn" type="Button" parent="HUD/MainHUDContainer/BottomDock/Margin/VBox/ToolbarHBox/PlanetSizeHBox" unique_id=1840000035]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(30, 26)
+layout_mode = 2
+tooltip_text = "Tamanho do Planeta (Clique para redefinir para 1.0x)"
+theme_override_colors/font_color = Color(1, 0.92, 0.75, 1)
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBoxFlat_shape_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_tool_btn_hover")
+text = "1.0x"
+
+[node name="BtnPlanetSizeInc" type="Button" parent="HUD/MainHUDContainer/BottomDock/Margin/VBox/ToolbarHBox/PlanetSizeHBox" unique_id=1840000036]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(20, 26)
+layout_mode = 2
+tooltip_text = "Aumentar Planeta (PageUp)"
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBoxFlat_shape_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_tool_btn_hover")
+text = "+"
+
+[node name="VSepPlanet" type="VSeparator" parent="HUD/MainHUDContainer/BottomDock/Margin/VBox/ToolbarHBox" unique_id=1840000037]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxLine_vsep")
+
+[node name="OceanHBox" type="HBoxContainer" parent="HUD/MainHUDContainer/BottomDock/Margin/VBox/ToolbarHBox" unique_id=1840000022]
+layout_mode = 2
+theme_override_constants/separation = 3
+
+[node name="OceanCheck" type="CheckButton" parent="HUD/MainHUDContainer/BottomDock/Margin/VBox/ToolbarHBox/OceanHBox" unique_id=1185418866]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Oceanos 3D (Ligar/Desligar)"
+theme_override_colors/font_color = Color(0.92, 0.94, 0.98, 1)
+theme_override_colors/font_focus_color = Color(1, 0.92, 0.7, 1)
+theme_override_colors/font_pressed_color = Color(0.92, 0.94, 0.98, 1)
+theme_override_colors/font_hover_color = Color(1, 0.92, 0.7, 1)
+theme_override_colors/font_hover_pressed_color = Color(1, 0.92, 0.7, 1)
+theme_override_font_sizes/font_size = 10
+button_pressed = true
+text = ""
+
+[node name="SeaLevelSlider" type="HSlider" parent="HUD/MainHUDContainer/BottomDock/Margin/VBox/ToolbarHBox/OceanHBox" unique_id=324818476]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(38, 0)
+layout_mode = 2
+size_flags_vertical = 4
+min_value = -0.1
+max_value = 0.25
+step = 0.01
+value = -0.1
+
+[node name="HSepTerrains" type="HSeparator" parent="HUD/MainHUDContainer/BottomDock/Margin/VBox" unique_id=1840000023]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxLine_hsep")
+
+[node name="TerrainsScroll" type="ScrollContainer" parent="HUD/MainHUDContainer/BottomDock/Margin/VBox" unique_id=1840000024]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 3
+vertical_scroll_mode = 3
+
+[node name="TerrainsContainer" type="HBoxContainer" parent="HUD/MainHUDContainer/BottomDock/Margin/VBox/TerrainsScroll" unique_id=1241919552]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 3
+alignment = 1
+
+[node name="HoverTooltip" type="PanelContainer" parent="HUD" unique_id=996040215]
+unique_name_in_owner = true
+visible = false
+z_index = 60
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_badge")
+
+[node name="HoverTooltipLabel" type="Label" parent="HUD/HoverTooltip" unique_id=996040216]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.95, 0.75, 1)
+theme_override_font_sizes/font_size = 10
+text = "Tooltip"
+
+[node name="PauseMenuModal" type="Control" parent="HUD" unique_id=2048992190]
+unique_name_in_owner = true
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Backdrop" type="ColorRect" parent="HUD/PauseMenuModal" unique_id=943220648]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.04, 0.05, 0.09, 0.65)
+
+[node name="Center" type="CenterContainer" parent="HUD/PauseMenuModal" unique_id=206462153]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PauseWindow" type="Control" parent="HUD/PauseMenuModal/Center" unique_id=38298670]
+custom_minimum_size = Vector2(380, 410)
+layout_mode = 2
+
+[node name="Card" type="PanelContainer" parent="HUD/PauseMenuModal/Center/PauseWindow" unique_id=38298673]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_modal_card")
+
+[node name="Margin" type="MarginContainer" parent="HUD/PauseMenuModal/Center/PauseWindow/Card" unique_id=1704045248]
+layout_mode = 2
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_top = 36
+theme_override_constants/margin_right = 28
+theme_override_constants/margin_bottom = 24
+
+[node name="VBox" type="VBoxContainer" parent="HUD/PauseMenuModal/Center/PauseWindow/Card/Margin" unique_id=244658922]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Subtitle" type="Label" parent="HUD/PauseMenuModal/Center/PauseWindow/Card/Margin/VBox" unique_id=1200707790]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.35, 0.4, 0.5, 1)
+theme_override_font_sizes/font_size = 12
+text = "Simulador Planetário Divino"
+horizontal_alignment = 1
+
+[node name="HSep" type="HSeparator" parent="HUD/PauseMenuModal/Center/PauseWindow/Card/Margin/VBox" unique_id=1811523710]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxLine_hsep")
+
+[node name="BtnPauseResume" type="Button" parent="HUD/PauseMenuModal/Center/PauseWindow/Card/Margin/VBox" unique_id=763947813]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 13
+theme_override_styles/normal = SubResource("StyleBoxFlat_tool_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_tool_btn_hover")
+text = "Continuar (Esc)"
+
+[node name="BtnPauseNewWorld" type="Button" parent="HUD/PauseMenuModal/Center/PauseWindow/Card/Margin/VBox" unique_id=1332914999]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 13
+theme_override_styles/normal = SubResource("StyleBoxFlat_tool_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_tool_btn_hover")
+text = "Novo Planeta"
+
+[node name="BtnPauseSave" type="Button" parent="HUD/PauseMenuModal/Center/PauseWindow/Card/Margin/VBox" unique_id=1138319521]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 13
+theme_override_styles/normal = SubResource("StyleBoxFlat_tool_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_tool_btn_hover")
+text = "Salvar Planeta"
+
+[node name="BtnPauseLoad" type="Button" parent="HUD/PauseMenuModal/Center/PauseWindow/Card/Margin/VBox" unique_id=1015790543]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 13
+theme_override_styles/normal = SubResource("StyleBoxFlat_tool_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_tool_btn_hover")
+text = "Carregar Planeta"
+
+[node name="BtnPauseSettings" type="Button" parent="HUD/PauseMenuModal/Center/PauseWindow/Card/Margin/VBox" unique_id=1888193423]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 13
+theme_override_styles/normal = SubResource("StyleBoxFlat_tool_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_tool_btn_hover")
+text = "Configurações"
+
+[node name="BtnPauseQuit" type="Button" parent="HUD/PauseMenuModal/Center/PauseWindow/Card/Margin/VBox" unique_id=1810581640]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.7, 0.7, 1)
+theme_override_font_sizes/font_size = 13
+theme_override_styles/normal = SubResource("StyleBoxFlat_tool_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_tool_btn_hover")
+text = "Sair para o Menu Principal"
+
+[node name="PauseHeaderRibbon" type="PanelContainer" parent="HUD/PauseMenuModal/Center/PauseWindow" unique_id=682957541]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -80.0
+offset_top = -14.0
+offset_right = 80.0
+offset_bottom = 20.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_header_ribbon")
+
+[node name="PauseHeaderLabel" type="Label" parent="HUD/PauseMenuModal/Center/PauseWindow/PauseHeaderRibbon" unique_id=2011195716]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 14
+text = "PAUSA"
+horizontal_alignment = 1
+
+[node name="BtnClosePause" type="Button" parent="HUD/PauseMenuModal/Center/PauseWindow" unique_id=38298679]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -20.0
+offset_top = -14.0
+offset_right = 14.0
+offset_bottom = 20.0
+theme_override_styles/normal = SubResource("StyleBoxFlat_close_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_close_btn_hover")
+
+[node name="WorldGenModal" type="Control" parent="HUD" unique_id=1949645135]
+unique_name_in_owner = true
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Backdrop" type="ColorRect" parent="HUD/WorldGenModal" unique_id=1834208205]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.04, 0.05, 0.09, 0.65)
+
+[node name="Center" type="CenterContainer" parent="HUD/WorldGenModal" unique_id=372686111]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="WorldGenWindow" type="Control" parent="HUD/WorldGenModal/Center" unique_id=1783671660]
+custom_minimum_size = Vector2(740, 500)
+layout_mode = 2
+
+[node name="Card" type="PanelContainer" parent="HUD/WorldGenModal/Center/WorldGenWindow" unique_id=1783671663]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_modal_card")
+
+[node name="Margin" type="MarginContainer" parent="HUD/WorldGenModal/Center/WorldGenWindow/Card" unique_id=285889406]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 36
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 20
+
+[node name="VBox" type="VBoxContainer" parent="HUD/WorldGenModal/Center/WorldGenWindow/Card/Margin" unique_id=741875320]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Subtitle" type="Label" parent="HUD/WorldGenModal/Center/WorldGenWindow/Card/Margin/VBox" unique_id=1691215680]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.35, 0.4, 0.5, 1)
+theme_override_font_sizes/font_size = 12
+text = "Comece com uma tela limpa e desenhe cada continente, relevo e bioma com suas mãos!"
+horizontal_alignment = 1
+
+[node name="HSep" type="HSeparator" parent="HUD/WorldGenModal/Center/WorldGenWindow/Card/Margin/VBox" unique_id=744429817]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxLine_hsep")
+
+[node name="Scroll" type="ScrollContainer" parent="HUD/WorldGenModal/Center/WorldGenWindow/Card/Margin/VBox" unique_id=1327302935]
+custom_minimum_size = Vector2(0, 310)
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 3
+
+[node name="WorldPresetsContainer" type="HFlowContainer" parent="HUD/WorldGenModal/Center/WorldGenWindow/Card/Margin/VBox/Scroll" unique_id=1254443189]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 10
+
+[node name="BottomHBox" type="HBoxContainer" parent="HUD/WorldGenModal/Center/WorldGenWindow/Card/Margin/VBox" unique_id=792719881]
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="BtnGenRandom" type="Button" parent="HUD/WorldGenModal/Center/WorldGenWindow/Card/Margin/VBox/BottomHBox" unique_id=285038136]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(240, 38)
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+theme_override_styles/normal = SubResource("StyleBoxFlat_tool_btn")
+text = "Gerar com Semente Aleatória"
+
+[node name="WorldGenHeaderRibbon" type="PanelContainer" parent="HUD/WorldGenModal/Center/WorldGenWindow" unique_id=694095298]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -110.0
+offset_top = -14.0
+offset_right = 110.0
+offset_bottom = 20.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_header_ribbon")
+
+[node name="WorldGenHeaderLabel" type="Label" parent="HUD/WorldGenModal/Center/WorldGenWindow/WorldGenHeaderRibbon" unique_id=838715425]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 14
+text = "NOVO PLANETA"
+horizontal_alignment = 1
+
+[node name="BtnCloseWorldGen" type="Button" parent="HUD/WorldGenModal/Center/WorldGenWindow" unique_id=539196714]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -20.0
+offset_top = -14.0
+offset_right = 14.0
+offset_bottom = 20.0
+theme_override_styles/normal = SubResource("StyleBoxFlat_close_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_close_btn_hover")
+
+[node name="SettingsModal" type="Control" parent="HUD" unique_id=440223781]
+unique_name_in_owner = true
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Backdrop" type="ColorRect" parent="HUD/SettingsModal" unique_id=2125685279]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.02, 0.03, 0.06, 0.85)
+
+[node name="SettingsMenuInst" parent="HUD/SettingsModal" unique_id=900073052 instance=ExtResource("5_settings")]
+unique_name_in_owner = true
+layout_mode = 1
+
+[node name="PhotoModeHint" type="Label" parent="HUD" unique_id=953304083]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -250.0
+offset_top = -50.0
+offset_right = 250.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.4, 0.85, 1, 0.9)
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxFlat_badge")
+text = "MODO FOTO: Clique ou pressione qualquer tecla para reexibir a interface"
+horizontal_alignment = 1
